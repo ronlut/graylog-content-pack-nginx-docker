@@ -26,34 +26,30 @@ You will be able to do searches for all requests of a given remote IP, all reque
 
 The pack comes with a default dashboard to build upon and several streams that pre-group your HTTP requests into interesting categories. The additional log information described below (see *Configuring nginx*) will also add timing information to the requests handled by nginx.
 
-![Screenshots](http://i63.tinypic.com/ohrei8.jpg)
-
-![Screenshots](https://s3.amazonaws.com/graylog2public/images/contentpack-nginx-2.png)
+See screenshots at the bottom of this page.
 
 ### Configuring nginx
 
 You need to run at least nginx version 1.11.8, escaped JSON support.
 
-**Add this to your nginx configuration file and restart the service:**
+**Add this to your nginx configuration and restart the service:**
 
-        log_format graylog2_json escape=json '{ "timestamp": "$time_iso8601", '
-                     '"remote_addr": "$remote_addr", '
-                     '"body_bytes_sent": $body_bytes_sent, '
-                     '"request_time": $request_time, '
-                     '"response_status": $status, '
-                     '"request": "$request", '
-                     '"request_method": "$request_method", '
-                     '"host": "$host",'
-                     '"upstream_cache_status": "$upstream_cache_status",'
-                     '"upstream_addr": "$upstream_addr",'
-                     '"http_x_forwarded_for": "$http_x_forwarded_for",'
-                     '"http_referrer": "$http_referer", '
-                     '"http_user_agent": "$http_user_agent", '
-                     '"http_version": "$server_protocol", '
-                     '"nginx_access": true }';
+    log_format graylog2_json escape=json '{ "timestamp": "$time_iso8601", '
+                 '"remote_addr": "$remote_addr", '
+                 '"body_bytes_sent": $body_bytes_sent, '
+                 '"request_time": $request_time, '
+                 '"response_status": $status, '
+                 '"request": "$request", '
+                 '"request_method": "$request_method", '
+                 '"host": "$host",'
+                 '"upstream_cache_status": "$upstream_cache_status",'
+                 '"upstream_addr": "$upstream_addr",'
+                 '"http_x_forwarded_for": "$http_x_forwarded_for",'
+                 '"http_referrer": "$http_referer", '
+                 '"http_user_agent": "$http_user_agent", '
+                 '"http_version": "$server_protocol", '
+                 '"nginx_access": true }';
 
-    # replace the hostnames with the IP or hostname of your Graylog2 server
-    # WRITE ABOUT https://serverfault.com/questions/599103/make-a-docker-application-write-to-stdout/634296#634296
     access_log /var/log/nginx/access.log graylog2_json;
     error_log /var/log/nginx/error.log warn;
 
@@ -82,3 +78,7 @@ for example:
     docker run --log-driver=gelf --log-opt gelf-address=udp://<GraylogIP>:12201 busybox echo Hello Graylog
 
         
+###Screenshots
+![Screenshots](http://i63.tinypic.com/ohrei8.jpg)
+
+![Screenshots](https://s3.amazonaws.com/graylog2public/images/contentpack-nginx-2.png)
