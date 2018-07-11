@@ -75,7 +75,7 @@ Now, when your logs are collected by docker from stdout & stderr, you can run yo
     
 for example:
 
-    docker run --log-driver=gelf --log-opt gelf-address=udp://<GraylogIP>:12201 busybox echo Hello Graylog
+    docker run --log-driver=gelf --log-opt gelf-address=udp://<GraylogIP>:12401 busybox echo Hello Graylog
         
 ### Screenshots
 ![Screenshots](http://i63.tinypic.com/ohrei8.jpg)
