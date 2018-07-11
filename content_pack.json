@@ -194,6 +194,13 @@
           "value": "",
           "inverted": true,
           "description": ""
+        },
+        {
+          "type": "REGEX",
+          "field": "message",
+          "value": "^(\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}) \\[(\\w+)\\] (\\d+).(\\d+): (.*)$",
+          "inverted": false,
+          "description": ""
         }
       ],
       "outputs": [],
