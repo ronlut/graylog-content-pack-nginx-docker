@@ -68,6 +68,22 @@
           "condition_type": "REGEX",
           "condition_value": "^(\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}) \\[(\\w+)\\] (\\d+).(\\d+): (.*)$",
           "order": 2
+        },
+        {
+          "title": "[Error log] Reduce error log to message only",
+          "type": "REGEX_REPLACE",
+          "cursor_strategy": "COPY",
+          "target_field": "message",
+          "source_field": "message",
+          "configuration": {
+            "regex": "^\\d{4}\\/\\d{2}\\/\\d{2} \\d{2}:\\d{2}:\\d{2} \\[\\w+\\] \\d+.\\d+: (.*?), client:.*$",
+            "replacement": "$1",
+            "replace_all": false
+          },
+          "converters": [],
+          "condition_type": "REGEX",
+          "condition_value": "^(\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}) \\[(\\w+)\\] (\\d+).(\\d+): (.*)$",
+          "order": 3
         }
       ]
     }
