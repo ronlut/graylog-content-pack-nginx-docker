@@ -55,95 +55,19 @@
           "order": 1
         },
         {
-          "title": "[Error log] host",
-          "type": "REGEX",
+          "title": "[Error log] extract fields",
+          "type": "GROK",
           "cursor_strategy": "COPY",
-          "target_field": "host",
+          "target_field": "",
           "source_field": "message",
           "configuration": {
-            "regex_value": "host:\\s\"(.+?)\"(,|$)"
+              "grok_pattern": "^(?<timestamp>%{YEAR}[./-]%{MONTHNUM}[./-]%{MONTHDAY}[- ]%{TIME}) \\[%{LOGLEVEL:severity}\\] %{POSINT:pid}#%{NUMBER}: %{GREEDYDATA:errormessage}(?:, client: %{IPORHOST:client})(?:, server: %{IPORHOSTORUNDERSCORE:server})(?:, request: %{QS:request})?(?:, upstream: \"%{URI:upstream}\")?(?:, host: %{QS:host})?(?:, referrer: \"%{URI:referrer}\")?$",
+              "named_captures_only": true
           },
           "converters": [],
           "condition_type": "REGEX",
-          "condition_value": "^[^\\{\\s]",
+          "condition_value": "^(\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}) \\[(\\w+)\\] (\\d+).(\\d+): (.*)$",
           "order": 2
-        },
-        {
-          "title": "[Error log] timestamp",
-          "type": "REGEX",
-          "cursor_strategy": "COPY",
-          "target_field": "timestamp",
-          "source_field": "message",
-          "configuration": {
-            "regex_value": "^(\\d\\d\\d\\d/\\d\\d/\\d\\d\\s\\d\\d:\\d\\d:\\d\\d)\\s.*$"
-          },
-          "converters": [
-            {
-              "type": "DATE",
-              "configuration": {
-                "date_format": "yyyy/MM/dd HH:mm:ss "
-              }
-            }
-          ],
-          "condition_type": "REGEX",
-          "condition_value": "^[^\\{\\s]",
-          "order": 3
-        },
-        {
-          "title": "[Error log] server",
-          "type": "REGEX",
-          "cursor_strategy": "COPY",
-          "target_field": "server",
-          "source_field": "message",
-          "configuration": {
-            "regex_value": "server:\\s(.+?)(,|$)"
-          },
-          "converters": [],
-          "condition_type": "REGEX",
-          "condition_value": "^[^\\{\\s]",
-          "order": 4
-        },
-        {
-          "title": "[Error log] remote_addr/client",
-          "type": "REGEX",
-          "cursor_strategy": "COPY",
-          "target_field": "remote_addr",
-          "source_field": "message",
-          "configuration": {
-            "regex_value": "client:\\s(.+?)(,|$)"
-          },
-          "converters": [],
-          "condition_type": "REGEX",
-          "condition_value": "^[^\\{\\s]",
-          "order": 5
-        },
-        {
-          "title": "[Error log] request_path/request",
-          "type": "REGEX",
-          "cursor_strategy": "COPY",
-          "target_field": "request_path",
-          "source_field": "message",
-          "configuration": {
-            "regex_value": "request:\\s\"(.+?)\"(,|$)"
-          },
-          "converters": [],
-          "condition_type": "REGEX",
-          "condition_value": "^[^\\{\\s]",
-          "order": 6
-        },
-        {
-          "title": "[Error log] request_verb",
-          "type": "REGEX",
-          "cursor_strategy": "COPY",
-          "target_field": "request_verb",
-          "source_field": "message",
-          "configuration": {
-            "regex_value": "request:\\s\"(GET|HEAD|POST|PUT|DELETE|TRACE|OPTIONS|CONNECT|PATCH).+\"(,|$)"
-          },
-          "converters": [],
-          "condition_type": "REGEX",
-          "condition_value": "^[^\\{\\s]",
-          "order": 7
         }
       ]
     }
@@ -486,7 +410,120 @@
       ]
     }
   ],
-  "grok_patterns": [],
+  "grok_patterns": [
+    {
+      "name": "HOUR",
+      "pattern": "(?:2[0123]|[01]?[0-9])"
+    },
+    {
+      "name": "HOSTNAME",
+      "pattern": "\\b(?:[0-9A-Za-z][0-9A-Za-z-]{0,62})(?:\\.(?:[0-9A-Za-z][0-9A-Za-z-]{0,62}))*(\\.?|\\b)"
+    },
+    {
+      "name": "IPV6",
+      "pattern": "((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?"
+    },
+    {
+      "name": "IPV4",
+      "pattern": "(?<![0-9])(?:(?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])[.](?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])[.](?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])[.](?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5]))(?![0-9])"
+    },
+    {
+      "name": "IP",
+      "pattern": "(?:%{IPV6}|%{IPV4})"
+    },
+    {
+      "name": "IPORHOSTORUNDERSCORE",
+      "pattern": "(?:%{IPORHOST}|_)"
+    },
+    {
+      "name": "MINUTE",
+      "pattern": "(?:[0-5][0-9])"
+    },
+    {
+      "name": "BASE10NUM",
+      "pattern": "(?<![0-9.+-])(?>[+-]?(?:(?:[0-9]+(?:\\.[0-9]+)?)|(?:\\.[0-9]+)))"
+    },
+    {
+      "name": "URI",
+      "pattern": "%{URIPROTO}://(?:%{USER}(?::[^@]*)?@)?(?:%{URIHOST})?(?:%{URIPATHPARAM})?"
+    },
+    {
+      "name": "YEAR",
+      "pattern": "(?>\\d\\d){1,2}"
+    },
+    {
+      "name": "GREEDYDATA",
+      "pattern": ".*"
+    },
+    {
+      "name": "POSINT",
+      "pattern": "\\b(?:[1-9][0-9]*)\\b"
+    },
+    {
+      "name": "URIHOST",
+      "pattern": "%{IPORHOST}(?::%{POSINT:port})?"
+    },
+    {
+      "name": "IPORHOST",
+      "pattern": "(?:%{IP}|%{HOSTNAME})"
+    },
+    {
+      "name": "URIPROTO",
+      "pattern": "[A-Za-z]+(\\+[A-Za-z+]+)?"
+    },
+    {
+      "name": "QS",
+      "pattern": "%{QUOTEDSTRING}"
+    },
+    {
+      "name": "QUOTEDSTRING",
+      "pattern": "(?>(?<!\\\\)(?>\"(?>\\\\.|[^\\\\\"]+)+\"|\"\"|(?>'(?>\\\\.|[^\\\\']+)+')|''|(?>`(?>\\\\.|[^\\\\`]+)+`)|``))"
+    },
+    {
+      "name": "URIPATHPARAM",
+      "pattern": "%{URIPATH}(?:%{URIPARAM})?"
+    },
+    {
+      "name": "LOGLEVEL",
+      "pattern": "([Aa]lert|ALERT|[Tt]race|TRACE|[Dd]ebug|DEBUG|[Nn]otice|NOTICE|[Ii]nfo|INFO|[Ww]arn?(?:ing)?|WARN?(?:ING)?|[Ee]rr?(?:or)?|ERR?(?:OR)?|[Cc]rit?(?:ical)?|CRIT?(?:ICAL)?|[Ff]atal|FATAL|[Ss]evere|SEVERE|EMERG(?:ENCY)?|[Ee]merg(?:ency)?)"
+    },
+    {
+      "name": "MONTHDAY",
+      "pattern": "(?:(?:0[1-9])|(?:[12][0-9])|(?:3[01])|[1-9])"
+    },
+    {
+      "name": "MONTHNUM",
+      "pattern": "(?:0?[1-9]|1[0-2])"
+    },
+    {
+      "name": "NUMBER",
+      "pattern": "(?:%{BASE10NUM})"
+    },
+    {
+      "name": "SECOND",
+      "pattern": "(?:(?:[0-5]?[0-9]|60)(?:[:.,][0-9]+)?)"
+    },
+    {
+      "name": "TIME",
+      "pattern": "(?!<[0-9])%{HOUR}:%{MINUTE}(?::%{SECOND})(?![0-9])"
+    },
+    {
+      "name": "USER",
+      "pattern": "%{USERNAME}"
+    },
+    {
+      "name": "USERNAME",
+      "pattern": "[a-zA-Z0-9._-]+"
+    },
+    {
+      "name": "URIPATH",
+      "pattern": "(?:/[A-Za-z0-9$.+!*'(){},~:;=@#%_\\-]*)+"
+    },
+    {
+      "name": "URIPARAM",
+      "pattern": "\\?[A-Za-z0-9$.+!*'|(){},~@#%&/=:;_?\\-\\[\\]<>]*"
+    }
+  ],
   "lookup_tables": [],
   "lookup_caches": [],
   "lookup_data_adapters": []
