@@ -2,7 +2,7 @@
 
 This is partially based on the [nginx json content pack](https://github.com/petestorey26/graylog-content-pack-nginx-json).
 
-It is designed for people using nginx on top of docker, and will only work with nginx version 1.11.8 onwards (you can remove the `escape=json` from the nginx setup if you want to use an earlier version).
+It is designed for people using nginx in a docker container, and will only work with nginx version 1.11.8 onwards (you can remove the `escape=json` from the nginx setup if you want to use an earlier version).
 
 The advantage of using docker's GELF driver is that you get a LOT of extra information you'll otherwise (e.g. syslog) won't get.
 List of additional metadata fields you're getting when using docker's GELF driver [(source)](https://www.graylog.org/post/centralized-docker-container-logging-with-native-graylog-integration):

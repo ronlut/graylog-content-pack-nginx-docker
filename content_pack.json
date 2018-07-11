@@ -1,6 +1,6 @@
 {
   "name": "nginx-docker",
-  "description": "This content pack supports nginx running on top of docker, sending JSON formatted log messages over GELF, allowing for arbitrary addition of fields without having to add regex extractors, as well as faster performance on the graylog side as it has reduced numbers of regexes running against the input compared with the original graylog version.\\n\\nIt then blanks the \\\"json\\\" field used as an intermediate step, and reduces the message field to just show the request path, reducing the storage requirements.",
+  "description": "This content pack supports nginx running in docker, sending JSON formatted log messages over GELF, allowing for arbitrary addition of fields without having to add regex extractors, as well as faster performance on the graylog side as it has reduced numbers of regexes running against the input compared with the original graylog version.\\n\\nIt then blanks the \\\"json\\\" field used as an intermediate step, and reduces the message field to just show the request path, reducing the storage requirements.",
   "category": "nginx",
   "inputs": [
     {
