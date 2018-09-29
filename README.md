@@ -17,7 +17,7 @@ List of additional metadata fields you're getting when using docker's GELF drive
  * Creation time – A timestamp when this container was started
  * Log level – Was the message send to STDOUT or STDERR?
  
-The core advantage of using json is that you can add arbitrary fields to the nginx logging and they will just appear magically in nginx, rather than having to delve into complex regex expressions to do things.
+The core advantage of using json is that you can add arbitrary fields to the nginx logging and they will just appear magically in graylog rather than having to delve into complex regex expressions to do things.
 
 This content pack will create one UDP input for both of nginx's logs (`error_log` and `access_log`). 
 
