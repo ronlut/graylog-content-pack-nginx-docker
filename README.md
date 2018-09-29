@@ -53,6 +53,8 @@ You need to run at least nginx version 1.11.8, escaped JSON support.
     access_log /var/log/nginx/access.log graylog2_json;
     error_log /var/log/nginx/error.log warn;
 
+This configuration will send various NGINX variables to Graylog. You can log other useful information for each request by adding any other [NGINX variables](http://nginx.org/en/docs/http/ngx_http_core_module.html#variables) into the JSON.
+
 
 ### Building (your) docker and running it
 **Build**
