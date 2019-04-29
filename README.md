@@ -34,7 +34,7 @@ You need to run at least nginx version 1.11.8, escaped JSON support.
 
 **Add this to your nginx configuration and restart the service:**
 
-    log_format graylog2_json escape=json '{ "timestamp": "$time_iso8601", '
+    log_format graylog2_json escape=json '{ "timestamp": "$msec", '
                  '"remote_addr": "$remote_addr", '
                  '"body_bytes_sent": $body_bytes_sent, '
                  '"request_time": $request_time, '
